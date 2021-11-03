@@ -6,15 +6,11 @@ Box services have sprung up in the last few years to offer a certain category of
 
 This is a website for such a subscription box company
 
-## Types of box service
-
-(games, makeup, food/drinks, clothes, etc.)
-
 ## Technology
 
-Django Rest Framework
-React.js
-Bootstrap
+- Django Rest Framework
+- React.js
+- Bootstrap
 
 ## Features
 
@@ -31,3 +27,18 @@ Bootstrap
     - Percentage belonging to which demographic
     - Monthly revenue generation
   - Data visualization (line cart) view of the popularity of the different types of box services offered
+
+## Resources
+
+### Database
+
+![ERD](./resources/video_games_ERD.png)
+
+All video game data is sourced from [Database Star](https://www.databasestar.com/sample-database-video-games/ "Sample Dataset") thanks to Ben Brumm
+
+Table specific information provided by Databse Star can here found [here](./resources/table_details.md)
+
+### Styling
+
+Heavily influenced by [Retro Game Treasure](https://www.retrogametreasure.com/) box Service
+![Retro Game Treasure image](./resources/retrogametreasure.png)
