@@ -15,9 +15,13 @@ const Login = () => {
 
   useEffect(() => {
     clearValues();
+    if (jwt) {
+      navigate("/");
+    }
   }, [jwt]);
 
   const getJwt = async () => {
+    setLoading(true);
     let credentials = {
       username: values.loginUsername,
       password: values.loginPassword,
@@ -30,21 +34,13 @@ const Login = () => {
       const { access } = response.data;
       setJwt(access);
     } else {
-      console.log("Unable to login");
-      setLoading(false)
-      return false;
+        //TODO Toast or modal with bad credentials, prompt to register
     }
     setLoading(false);
-    return true;
   };
 
   function login() {
     getJwt();
-    setLoading(true);
-    while (isLoading) {}
-  }
-  if (jwt) {
-    navigate("/");
   }
 
   return (
