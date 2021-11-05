@@ -4,8 +4,9 @@ import "bootswatch/dist/superhero/bootstrap.min.css";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
 import Footer from "./components/Footer/Footer";
-import Register from "./features/Register/Register";
 import WhatsInside from "./components/WhatsInside/WhatsInside";
+import Register from "./features/Register/Register";
+import Login from "./features/Login/Login";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
               <Route path="/" exact element={<Home />} />
               <Route path="/whats-inside" element={<WhatsInside />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
             </Routes>
             <Footer />
           </div>

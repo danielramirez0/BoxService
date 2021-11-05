@@ -84,26 +84,46 @@ export async function getProfileAPI(headers) {
 //     return response;
 //   });
 // }
+function getErrorMessage(obj) {
+  for (const issue in obj.response.data) {
+    if (Object.hasOwnProperty.call(obj.response.data, issue)) {
+      const element = obj.response.data[issue];
+      console.log("Error message");
+      console.log(issue, element);
+    }
+  }
+}
 
-export async function registerNewUser(user, endpoint) {
-  const { confirmPassword, setupPassword, ...newUser } = {
-    password: user.setupPassword,
-    ...user,
-  };
+export async function loginUser(credentials, endpoint) {
+  const errorHandler = getErrorMessage;
   const result = await axios
-    .post(endpoint, newUser)
+    .post(endpoint, credentials)
     .then((response) => {
       return response;
     })
     .catch((error) => {
-      console.log(error);
-      if (error.response.data) {
-        for (const issue in error.response.data) {
-          if (Object.hasOwnProperty.call(error.response.data, issue)) {
-            const element = error.response.data[issue];
-            console.log(issue, element);
-          }
-        }
+      if (error.response) {
+        errorHandler(error);
+      } else {
+        console.log("Failed to login:", error);
+      }
+      return false;
+    });
+  return result;
+}
+
+export async function registerNewUser(user, endpoint) {
+  const errorHandler = getErrorMessage;
+  const result = await axios
+    .post(endpoint, user)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response) {
+        errorHandler(error);
+      } else {
+        console.log("Failed to register user:", error);
       }
       return false;
     });

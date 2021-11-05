@@ -4,7 +4,7 @@ import hero from "../../img/Hero_Edit.png";
 const Navbar = () => {
   let items = 0;
   return (
-    <div className="row">
+    <div className="row mb-4">
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-flex ms-auto me-auto">
           <a className="navbar-brand" href="/">
@@ -51,12 +51,7 @@ const Navbar = () => {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
-                  About
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
+                <a className="nav-link" href="/login">
                   Login
                 </a>
               </li>

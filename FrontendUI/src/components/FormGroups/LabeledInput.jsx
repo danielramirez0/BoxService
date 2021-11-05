@@ -9,7 +9,7 @@ const LabeledInput = (props) => {
         name={props.inputId}
         className="form-control text-center"
         id={props.inputId}
-        value={props.inputValue || ""}
+        value={props.inputValue || ''}
         onChange={(e) => props.handleChange(e)}
         required={props.isRequired}
       />

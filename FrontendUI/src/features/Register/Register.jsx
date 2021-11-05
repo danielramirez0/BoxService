@@ -26,12 +26,16 @@ const Register = () => {
       let testPass = isOkPass(values.setupPassword);
 
       if (testPass.result === true) {
+        const { confirmPassword, setupPassword, ...newUser } = {
+          password: values.setupPassword,
+          ...values,
+        };
         registered = await registerNewUser(
-          values,
+          newUser,
           "http://127.0.0.1:8000/api/auth/register/"
         );
-      }else {
-          alert(testPass.error)
+      } else {
+        alert(testPass.error);
       }
     }
     if (registered) {
@@ -49,14 +53,17 @@ const Register = () => {
       // await dispatch(getProfile(headers));
       //   }
       navigate("/");
-    //   clearValues();
-    //   setLoading(false);
+      //   clearValues();
+      //   setLoading(false);
+    }
+    else {
+        alert('There was an issue registering. See the console.')
     }
   }
 
   return (
     // !authenticated && (
-    <div className="" id="register-container">
+    <div className="row mb-4" id="register-container">
       {/* <div className="center full-box"> */}
       <form onSubmit={handleSubmit} className="col-md-4 ms-auto me-auto">
         <fieldset>
