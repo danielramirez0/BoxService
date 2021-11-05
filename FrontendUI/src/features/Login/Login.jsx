@@ -7,11 +7,15 @@ import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 
 const Login = () => {
-  const { errors, values, handleChange, handleSubmit, clearValues } =
-    useForm(login);
+  const { values, handleChange, handleSubmit, clearValues } = useForm(login);
 
   const [jwt, setJwt] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    clearValues();
+  }, [jwt]);
 
   const getJwt = async () => {
     let credentials = {
@@ -27,14 +31,20 @@ const Login = () => {
       setJwt(access);
     } else {
       console.log("Unable to login");
+      setLoading(false)
+      return false;
     }
     setLoading(false);
+    return true;
   };
 
   function login() {
     getJwt();
     setLoading(true);
     while (isLoading) {}
+  }
+  if (jwt) {
+    navigate("/");
   }
 
   return (
@@ -71,29 +81,29 @@ const Login = () => {
               placeholderText="Password"
             />
           </div>
+          <div className="form-input m-3">
+            <Button
+              variant="primary"
+              type="submit"
+              disabled={isLoading ? true : false}
+            >
+              {isLoading ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  <span className="visually-hidden">Loading...</span>
+                </>
+              ) : (
+                "Login"
+              )}
+            </Button>
+          </div>
         </fieldset>
-        <div className="form-input m-3">
-          <Button
-            variant="primary"
-            disabled={isLoading ? true : false}
-            onClick={handleSubmit}
-          >
-            {isLoading ? (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />
-                <span className="visually-hidden">Loading...</span>
-              </>
-            ) : (
-              "Register"
-            )}
-          </Button>
-        </div>
       </form>
     </div>
   );
