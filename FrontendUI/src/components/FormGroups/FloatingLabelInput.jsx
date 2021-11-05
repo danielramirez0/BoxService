@@ -4,7 +4,7 @@ const FloatingLabelInput = (props) => {
       <input
         type={props.inputType}
         name={props.inputId}
-        className="form-control"
+        className={props.inputClasses}
         id={props.inputId}
         value={props.inputValue || ""}
         onChange={(e) => props.handleChange(e)}
