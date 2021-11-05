@@ -5,98 +5,57 @@ import { useEffect, useState } from "react";
 import isOkPass, { registerNewUser, postNewProfile } from "../../services/user";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/FormControl";
 import FloatingLabelInput from "../../components/FormGroups/FloatingLabelInput";
+import { getAllPlatforms } from "../../services/games";
 
-const Register = () => {
+const Survey = () => {
   const { errors, values, handleChange, handleSubmit, clearValues } =
-    useForm(registerUser);
+    useForm(submitSurvey);
 
-  const [isRegistered, setIsRegistered] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [platforms, setPlatforms] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isRegistered) {
-      navigate("/");
+    onLoad();
+  }, []);
+
+  async function onLoad() {
+    setLoading(true);
+    let platforms = await getAllPlatforms(
+      "http://127.0.0.1:8000/api/games/platforms/all/"
+    );
+    if (platforms) {
+      setPlatforms(platforms);
     }
-  }, [isRegistered]);
-
-  async function registerUser() {
-    if (values.setupPassword) {
-      if (isOkPass(values.setupPassword)) {
-        // Formats the object with structure needed for backend
-        const { confirmPassword, setupPassword, ...newUser } = {
-          password: values.setupPassword,
-          ...values,
-        };
-
-        setLoading(true);
-        const response = await registerNewUser(
-          newUser,
-          "http://127.0.0.1:8000/api/auth/register/"
-        );
-
-        if (response) {
-          //TODO Toast here registration successfull
-        } else {
-          //TODO Modal with issue
-        }
-      } else {
-        //TODO Toast invalid password
-      }
-      setIsRegistered(true);
-    }
+    setLoading(false);
   }
+
+  function submitSurvey() {}
 
   return (
     <div className="row mb-4" id="register-container">
       <h1>Complete this surey with your interests</h1>
       <form onSubmit={handleSubmit} className="col-md-4 ms-auto me-auto">
         <fieldset className="form-group">
-          {!isRegistered && (
-            <>
-              <legend>Desired Platforms</legend>
-              <small className="m-3">Check all that apply</small>
+          <legend>Desired Platforms</legend>
+          <small className="m-3">Check all that apply</small>
 
-              <div className="row">
-                <div className="col">
-                  <FloatingLabelInput
-                    divClasses="form-check mt-2 text-left"
-                    inputId="NES"
-                    labelText="NES"
-                    inputType="checkbox"
-                    inputValue="NES"
-                    inputClasses="form-check-input"
-                    handleChange={handleChange}
-                  />
-                </div>
-                <div className="col">
-                  <FloatingLabelInput
-                    divClasses="form-check mt-2 text-left"
-                    inputId="NES"
-                    labelText="NES"
-                    inputType="checkbox"
-                    inputValue="NES"
-                    inputClasses="form-check-input"
-                    handleChange={handleChange}
-                  />
-                </div>
-                <div className="col">
-                  <FloatingLabelInput
-                    divClasses="form-check mt-2 text-left"
-                    inputId="NES"
-                    labelText="NES"
-                    inputType="checkbox"
-                    inputValue="NES"
-                    inputClasses="form-check-input"
-                    handleChange={handleChange}
-                  />
-                </div>
+          <div className="row">
+            {platforms.map((platform, index) => (
+              <div key={index} className="col">
+                <FloatingLabelInput
+                  divClasses="form-check mt-2 text-left"
+                  inputId={platform.platform_name}
+                  labelText={platform.platform_name}
+                  inputType="checkbox"
+                  inputValue={platform.platform_name}
+                  inputClasses="form-check-input"
+                  handleChange={handleChange}
+                />
               </div>
-            </>
-          )}
+            ))}
+          </div>
           <div className="form-input m-3">
             <Button
               variant="primary"
@@ -125,4 +84,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Survey;
