@@ -1,6 +1,6 @@
 const FloatingLabelInput = (props) => {
   return (
-    <div className={props.divClasses}>
+    <>
       <input
         type={props.inputType}
         name={props.inputId}
@@ -8,10 +8,11 @@ const FloatingLabelInput = (props) => {
         id={props.inputId}
         value={props.inputValue || ""}
         onChange={(e) => props.handleChange(e)}
+        data-dbid={props.databaseId}
         placeholder={props.placeholderText}
       />
       <label htmlFor={props.inputId}>{props.labelText}</label>
-    </div>
+    </>
   );
 };
 

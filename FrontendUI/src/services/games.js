@@ -1,7 +1,7 @@
 import axios from "axios";
 import getErrorMessage from "./errorHandlers";
 
-export async function getAllPlatforms(endpoint) {
+export async function getAllObjectsAt(endpoint) {
   const errorHandler = getErrorMessage;
   const result = await axios
     .get(endpoint)
@@ -10,7 +10,7 @@ export async function getAllPlatforms(endpoint) {
       if (error.response) {
         errorHandler(error);
       } else {
-        console.log("Failed to get platforms", error);
+        console.log("Failed to get objects", error);
       }
       return false;
     });
