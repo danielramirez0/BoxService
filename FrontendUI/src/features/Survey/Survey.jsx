@@ -98,7 +98,7 @@ const Survey = () => {
 
   return (
     <div className="row mb-4">
-      <h1>Customer Survey</h1>
+      <h1>Tell us what you like</h1>
       <form onSubmit={handleSubmit} className="col-md ms-auto me-auto">
         <fieldset className="form-group">
           {showPlatforms || showPublishers || showGenres ? (
@@ -190,7 +190,9 @@ const Survey = () => {
                     <div className="card-header">Publisher(s)</div>
                     <div className="card-body">
                       {answers.publishers.map((publisher) => (
-                        <h4 className="card-title">{publisher.publisherName}</h4>
+                        <h4 className="card-title">
+                          {publisher.publisherName}
+                        </h4>
                       ))}
                     </div>
                   </div>
