@@ -16,6 +16,7 @@ const Login = () => {
   useEffect(() => {
     clearValues();
     if (jwt) {
+      localStorage.setItem("JWT", jwt);
       navigate("/");
     }
   }, [jwt]);
@@ -31,10 +32,11 @@ const Login = () => {
       "http://localhost:8000/api/auth/login/"
     );
     if (response) {
-      const { access } = response.data;
+      const { access, refresh } = response.data;
       setJwt(access);
+      localStorage.setItem('refreshToken', refresh)
     } else {
-        //TODO Toast or modal with bad credentials, prompt to register
+      //TODO Toast or modal with bad credentials, prompt to register
     }
     setLoading(false);
   };
@@ -57,26 +59,31 @@ const Login = () => {
               <a href="/register">Register</a>
             </span>
 
-            <FloatingLabelInput
-              inputType="text"
-              divClasses="form-floating mb-3"
-              inputId="loginUsername"
-              inputValue={values.loginUsername}
-              handleChange={handleChange}
-              labelText="Username"
-              placeholderText="Username"
-            />
+            <div className="form-floating mb-3">
+              <FloatingLabelInput
+                inputClasses="form-control"
+                inputType="text"
+                inputId="loginUsername"
+                inputValue={values.loginUsername}
+                handleChange={handleChange}
+                labelText="Username"
+                placeholderText="Username"
+              />
+            </div>
 
-            <FloatingLabelInput
-              inputType="password"
-              divClasses="form-floating"
-              inputId="loginPassword"
-              inputValue={values.loginPassword}
-              handleChange={handleChange}
-              labelText="Password"
-              placeholderText="Password"
-            />
+            <div className="form-floating">
+              <FloatingLabelInput
+                inputClasses="form-control"
+                inputType="password"
+                inputId="loginPassword"
+                inputValue={values.loginPassword}
+                handleChange={handleChange}
+                labelText="Password"
+                placeholderText="Password"
+              />
+            </div>
           </div>
+
           <div className="form-input m-3">
             <Button
               variant="primary"

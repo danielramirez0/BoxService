@@ -37,6 +37,24 @@ export async function registerNewUser(user, endpoint) {
   return result;
 }
 
+export async function postSurveyAnswers(user, endpoint) {
+  const errorHandler = getErrorMessage;
+  const result = await axios
+    .post(endpoint, user)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response) {
+        errorHandler(error);
+      } else {
+        console.log("Error posting survey answers:", error);
+      }
+      return false;
+    });
+  return result;
+}
+
 export default function isOkPass(p) {
   const anUpperCase = new RegExp(/[A-Z]/);
   const aLowerCase = new RegExp(/[a-z]/);
@@ -153,4 +171,3 @@ export default function isOkPass(p) {
 //     return response;
 //   });
 // }
-

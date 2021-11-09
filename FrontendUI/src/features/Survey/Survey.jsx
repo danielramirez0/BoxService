@@ -2,12 +2,14 @@ import { useNavigate } from "react-router-dom";
 import useForm from "../../components/useForm/useForm";
 import LabeledInput from "../../components/FormGroups/LabeledInput";
 import { useEffect, useState } from "react";
-import isOkPass, { registerNewUser, postNewProfile } from "../../services/user";
+import { postSurveyAnswers } from "../../services/user";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import FloatingLabelInput from "../../components/FormGroups/FloatingLabelInput";
 import { getAllObjectsAt } from "../../services/games";
+import jwtDecode from "jwt-decode";
 import "./survey.css";
+import axios from "axios";
 
 const Survey = () => {
   const { errors, values, handleChange, handleSubmit, clearValues } =
@@ -20,11 +22,13 @@ const Survey = () => {
   const [platforms, setPlatforms] = useState([]);
   const [publishers, setPublishers] = useState([]);
   const [genres, setGenres] = useState([]);
+  const [user, setUser] = useState({});
   const [answers, setAnswers] = useState({
     platforms: [],
     publishers: [],
     genres: [],
   });
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,11 +37,15 @@ const Survey = () => {
 
   useEffect(() => {
     console.log(answers);
-    console.log(answers.platforms);
   }, [answers]);
 
   async function onLoad() {
     setLoading(true);
+    let jwt = localStorage.getItem("JWT");
+    if (jwt) {
+      const decoded = jwtDecode(jwt);
+      setUser(decoded);
+    }
     let platforms = await getAllObjectsAt(
       "http://127.0.0.1:8000/api/games/platforms/all/"
     );
@@ -56,13 +64,12 @@ const Survey = () => {
   }
 
   function updateAnswers() {
-    const { platforms, publishers, genres } = answers;
     if (showPlatforms) {
       let selectedPlatforms = [];
       for (const value in values) {
         selectedPlatforms.push({
-          databaseId: value,
-          platformName: values[value],
+          id: value,
+          platform_name: values[value],
         });
       }
       setAnswers({ ...answers, platforms: selectedPlatforms });
@@ -74,8 +81,8 @@ const Survey = () => {
       let selectedPublishers = [];
       for (const value in values) {
         selectedPublishers.push({
-          databaseId: value,
-          publisherName: values[value],
+          id: value,
+          publisher_name: values[value],
         });
       }
       setAnswers({ ...answers, publishers: selectedPublishers });
@@ -86,7 +93,7 @@ const Survey = () => {
     if (showGenres) {
       let selectedGenres = [];
       for (const value in values) {
-        selectedGenres.push({ databaseId: value, genreName: values[value] });
+        selectedGenres.push({ id: value, genre_name: values[value] });
       }
       setAnswers({ ...answers, genres: selectedGenres });
       clearValues();
@@ -94,7 +101,11 @@ const Survey = () => {
     }
   }
 
-  function submitSurvey() {}
+  async function submitSurvey() {
+    setLoading(true);
+    await postSurveyAnswers(user, "http://127.0.0.1:8000/api/surveys/submit/");
+    setLoading(false);
+  }
 
   return (
     <div className="row mb-4">
