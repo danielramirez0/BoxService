@@ -37,10 +37,10 @@ export async function registerNewUser(user, endpoint) {
   return result;
 }
 
-export async function postSurveyAnswers(user, endpoint) {
+export async function postSurveyAnswers(data, endpoint, specificEndpoint) {
   const errorHandler = getErrorMessage;
   const result = await axios
-    .post(endpoint, user)
+    .post(endpoint, data)
     .then((response) => {
       return response;
     })

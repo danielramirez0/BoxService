@@ -103,7 +103,11 @@ const Survey = () => {
 
   async function submitSurvey() {
     setLoading(true);
-    await postSurveyAnswers(user, "http://127.0.0.1:8000/api/surveys/submit/");
+    const data = {
+        user: user,
+        answers: answers
+    }
+    await postSurveyAnswers(data, "http://127.0.0.1:8000/api/surveys/submit/");
     setLoading(false);
   }
 

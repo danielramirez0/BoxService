@@ -1,22 +1,21 @@
 
-from django.db.models import fields
 from rest_framework import serializers
-from .models import PlatformPreferences, PublisherPreferences, GenrePreferences
+from .models import UserPlatform, UserPublisher, UserGenre
 
 
-class PlatformPreferencesSerializer(serializers.ModelSerializer):
+class UserPlatformSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PlatformPreferences
-        fields = ['id', 'user_id', 'platform_id']
+        model = UserPlatform
+        fields = ['id', 'user', 'platform']
 
 
-class PublisherPreferencesSerializer(serializers.ModelSerializer):
+class UserPublisherSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PublisherPreferences
-        fields = ['id', 'user_id', 'publisher_id']
+        model = UserPublisher
+        fields = ['id', 'user', 'publisher']
 
 
-class GenrePreferencesSerializer(serializers.ModelSerializer):
+class UserGenreSerializer(serializers.ModelSerializer):
     class Meta:
-        model = GenrePreferences
-        fields = ['id', 'user_id', 'genre_id']
+        model = UserGenre
+        fields = ['id', 'user', 'genre']
