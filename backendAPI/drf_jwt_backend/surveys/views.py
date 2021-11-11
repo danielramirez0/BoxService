@@ -22,12 +22,12 @@ class Answers(APIView):
 
     def post(self, request):
         data = JSONParser().parse(request)
-        param = request.query_params
-        if param['submit'] == 'platform':
+        type = request.query_params.get('type')
+        if type == 'platform':
             serializer = UserPlatformSerializer(data=data)
-        elif param['submit'] == 'publisher':
+        elif type == 'publisher':
             serializer = UserPublisherSerializer(data=data)
-        elif param['submit'] == 'genre':
+        elif type == 'genre':
             serializer = UserGenreSerializer(data=data)
         if serializer.is_valid():
             serializer.save()

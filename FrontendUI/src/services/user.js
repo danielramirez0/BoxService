@@ -37,7 +37,25 @@ export async function registerNewUser(user, endpoint) {
   return result;
 }
 
-export async function postSurveyAnswers(data, endpoint, specificEndpoint) {
+export async function getUser(endpoint, userId) {
+  const errorHandler = getErrorMessage;
+  const result = await axios
+    .get(endpoint, userId)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response) {
+        errorHandler(error);
+      } else {
+        console.log("Failed to get user:", error);
+      }
+      return false;
+    });
+  return result;
+}
+
+export async function postSurveyAnswers(data, endpoint) {
   const errorHandler = getErrorMessage;
   const result = await axios
     .post(endpoint, data)

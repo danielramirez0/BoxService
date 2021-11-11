@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import useForm from "../../components/useForm/useForm";
 import { useEffect, useState } from "react";
-import { loginUser } from "../../services/user";
+import { getUser, loginUser } from "../../services/user";
 import FloatingLabelInput from "../../components/FormGroups/FloatingLabelInput";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
@@ -9,15 +9,16 @@ import Spinner from "react-bootstrap/Spinner";
 const Login = () => {
   const { values, handleChange, handleSubmit, clearValues } = useForm(login);
 
-  const [jwt, setJwt] = useState(false);
+  const [jwt, setJwt] = useState(localStorage.getItem('JWT'));
   const [isLoading, setLoading] = useState(false);
+  const [baseURL, setBaseURL] = useState('http://localhost:8000/api/')
   const navigate = useNavigate();
 
   useEffect(() => {
     clearValues();
     if (jwt) {
       localStorage.setItem("JWT", jwt);
-      navigate("/");
+      navigate("/survey");
     }
   }, [jwt]);
 
@@ -29,7 +30,7 @@ const Login = () => {
     };
     const response = await loginUser(
       credentials,
-      "http://localhost:8000/api/auth/login/"
+      `${baseURL}auth/login/`
     );
     if (response) {
       const { access, refresh } = response.data;
@@ -43,6 +44,13 @@ const Login = () => {
 
   function login() {
     getJwt();
+  }
+
+  function onLoad() {
+      if (jwt) {
+          getUser(`${baseURL}auth/login/`)
+      
+      }
   }
 
   return (

@@ -15,3 +15,4 @@ class User(AbstractUser):
     middle_name = models.CharField(max_length=20)
     subscription = models.ForeignKey('box.BoxTier', blank=True, null=True, on_delete=models.CASCADE)
     balance = models.IntegerField(default=0)
+    survey_complete = models.BooleanField(default=False)
