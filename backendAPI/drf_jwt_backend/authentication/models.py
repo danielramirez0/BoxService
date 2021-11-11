@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.base import Model
 
 # Create your models here.
 
@@ -12,3 +13,6 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     middle_name = models.CharField(max_length=20)
+    subscription = models.ForeignKey('box.BoxTier', blank=True, null=True, on_delete=models.CASCADE)
+    balance = models.IntegerField(default=0)
+    survey_complete = models.BooleanField(default=False)
