@@ -1,10 +1,12 @@
-export default function getErrorMessage(obj) {
-  let response = "Error message";
-  for (const issue in obj.response.data) {
-    if (Object.hasOwnProperty.call(obj.response.data, issue)) {
-      const element = obj.response.data[issue];
-      response += `${element}`;
-    }
+export default function errorHandler(error) {
+  if (error.response) {
+    console.log(error.response.data);
+    console.log(error.response.status);
+    console.log(error.response.headers);
+  } else if (error.request) {
+    console.log(error.request);
+  } else {
+    console.log("Error", error.message);
   }
-  console.log(response);
+  console.log(error.config);
 }

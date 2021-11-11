@@ -5,20 +5,25 @@ import { getUser, loginUser } from "../../services/user";
 import FloatingLabelInput from "../../components/FormGroups/FloatingLabelInput";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
+import jwtDecode from "jwt-decode";
 
 const Login = () => {
   const { values, handleChange, handleSubmit, clearValues } = useForm(login);
 
-  const [jwt, setJwt] = useState(localStorage.getItem('JWT'));
+  const [jwt, setJwt] = useState(localStorage.getItem("JWT"));
   const [isLoading, setLoading] = useState(false);
-  const [baseURL, setBaseURL] = useState('http://localhost:8000/api/')
+  const [baseURL, setBaseURL] = useState("http://localhost:8000/api/");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    onLoad();
+  }, []);
 
   useEffect(() => {
     clearValues();
     if (jwt) {
       localStorage.setItem("JWT", jwt);
-      navigate("/survey");
+      navigate("/profile");
     }
   }, [jwt]);
 
@@ -28,14 +33,11 @@ const Login = () => {
       username: values.loginUsername,
       password: values.loginPassword,
     };
-    const response = await loginUser(
-      credentials,
-      `${baseURL}auth/login/`
-    );
+    const response = await loginUser(credentials, `${baseURL}auth/login/`);
     if (response) {
       const { access, refresh } = response.data;
       setJwt(access);
-      localStorage.setItem('refreshToken', refresh)
+      localStorage.setItem("refreshToken", refresh);
     } else {
       //TODO Toast or modal with bad credentials, prompt to register
     }
@@ -47,10 +49,13 @@ const Login = () => {
   }
 
   function onLoad() {
-      if (jwt) {
-          getUser(`${baseURL}auth/login/`)
-      
+    if (jwt) {
+      const decode = jwtDecode(jwt);
+      let user = getUser(`${baseURL}auth/user/?user=${decode.user_id}`);
+      if (user.survey_complete) {
+        navigate("/profile");
       }
+    }
   }
 
   return (

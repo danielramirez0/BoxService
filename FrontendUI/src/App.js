@@ -8,6 +8,7 @@ import WhatsInside from "./components/WhatsInside/WhatsInside";
 import Register from "./features/Register/Register";
 import Survey from "./features/Survey/Survey";
 import Login from "./features/Login/Login";
+import Profile from "./features/Profile/Profile";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/survey" element={<Survey />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/profile" element={<Profile />} />
 
             </Routes>
             <Footer />

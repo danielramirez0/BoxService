@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import useForm from "../../components/useForm/useForm";
 import LabeledInput from "../../components/FormGroups/LabeledInput";
 import { useEffect, useState } from "react";
-import { postSurveyAnswers } from "../../services/user";
+import { getUser, postSurveyAnswers, updateUser } from "../../services/user";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import FloatingLabelInput from "../../components/FormGroups/FloatingLabelInput";
@@ -23,7 +23,8 @@ const Survey = () => {
   const [platforms, setPlatforms] = useState([]);
   const [publishers, setPublishers] = useState([]);
   const [genres, setGenres] = useState([]);
-  const [user, setUser] = useState({});
+  const [userId, setUserId] = useState({});
+  const [account, setAccount] = useState({});
   const [answers, setAnswers] = useState({
     platforms: [],
     publishers: [],
@@ -37,30 +38,40 @@ const Survey = () => {
   }, []);
 
   useEffect(() => {
-    console.log(answers);
-  }, [answers]);
+    if (account.survey_complete === true) {
+      navigate("/profile");
+    }
+  }, [account]);
 
   async function onLoad() {
     setLoading(true);
+    const result = getUser();
     let jwt = localStorage.getItem("JWT");
     if (jwt) {
       const decoded = jwtDecode(jwt);
-      setUser(decoded);
-    }
-    let platforms = await getAllObjectsAt(
-      "http://127.0.0.1:8000/api/games/platforms/all/"
-    );
-    let publishers = await getAllObjectsAt(
-      "http://127.0.0.1:8000/api/games/publishers/all/"
-    );
-    let genres = await getAllObjectsAt(
-      "http://127.0.0.1:8000/api/games/genres/all/"
-    );
-    if (platforms && publishers && genres) {
-      setPlatforms(platforms);
-      setPublishers(publishers);
-      setGenres(genres);
-      setLoading(false);
+      setUserId(decoded.user_id);
+      let platforms = await getAllObjectsAt(
+        "http://127.0.0.1:8000/api/games/platforms/all/"
+      );
+      let publishers = await getAllObjectsAt(
+        "http://127.0.0.1:8000/api/games/publishers/all/"
+      );
+      let genres = await getAllObjectsAt(
+        "http://127.0.0.1:8000/api/games/genres/all/"
+      );
+      let account = await getUser(
+        `http://127.0.0.1:8000/api/auth/user/?user=${decoded.user_id}`
+      );
+
+      if (platforms && publishers && genres) {
+        setPlatforms(platforms);
+        setPublishers(publishers);
+        setGenres(genres);
+        setAccount(account.data);
+        setLoading(false);
+      }
+    } else {
+      navigate("/login");
     }
   }
 
@@ -105,12 +116,14 @@ const Survey = () => {
 
   async function submitSurvey() {
     setLoading(true);
+
     const selectedPlatforms = answers.platforms;
     const selectedPublishers = answers.publishers;
     const selectedGenres = answers.genres;
+
     await selectedPlatforms.forEach((platform) => {
       const data = {
-        user: user.user_id,
+        user: userId,
         platform: platform.id,
       };
       postSurveyAnswers(
@@ -118,9 +131,10 @@ const Survey = () => {
         "http://127.0.0.1:8000/api/surveys/answers/?type=platform"
       );
     });
+
     await selectedPublishers.forEach((publisher) => {
       const data = {
-        user: user.user_id,
+        user: userId,
         publisher: publisher.id,
         submission: "publisher",
       };
@@ -129,9 +143,10 @@ const Survey = () => {
         "http://127.0.0.1:8000/api/surveys/answers/?type=publisher"
       );
     });
+
     await selectedGenres.forEach((genre) => {
       const data = {
-        user: user.user_id,
+        user: userId,
         genre: genre.id,
         submission: "genre",
       };
@@ -140,7 +155,14 @@ const Survey = () => {
         "http://127.0.0.1:8000/api/surveys/answers/?type=genre"
       );
     });
-    setLoading(false);
+
+    let accountUpdate = { ...account, survey_complete: true };
+    await updateUser(
+      `http://127.0.0.1:8000/api/auth/user/?user=${userId}`,
+      accountUpdate
+    );
+
+    navigate("/profile");
   }
 
   return (
