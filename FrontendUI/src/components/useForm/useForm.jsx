@@ -13,24 +13,41 @@ const useForm = (callback) => {
         setErrors((errors) => ({
           ...errors,
           setupPassword:
-            event.target.value.length < 8 ? "Password must be at least 8 characters" : null,
+            event.target.value.length < 8
+              ? "Password must be at least 8 characters"
+              : null,
         }));
         break;
       case "confirmPassword":
         setErrors((errors) => ({
           ...errors,
           confirmPassword:
-            event.target.value !== values.setupPassword ? "Passwords do not match!" : null,
+            event.target.value !== values.setupPassword
+              ? "Passwords do not match!"
+              : null,
         }));
         break;
       default:
         break;
     }
 
-    setValues((values) => ({
-      ...values,
-      [event.target.name]: event.target.value,
-    }));
+    if (event.target.type === "checkbox") {
+      if (event.target.checked) {
+        setValues((values) => ({
+          ...values,
+          [event.target.dataset.dbid]: event.target.value,
+        }));
+      } else {
+        const { dbid } = event.target.dataset;
+        const { [dbid]: removed, ...filteredValues } = values;
+        setValues(filteredValues)
+      }
+    } else {
+      setValues((values) => ({
+        ...values,
+        [event.target.name]: event.target.value,
+      }));
+    }
   };
 
   const handleMultiSelect = (event) => {

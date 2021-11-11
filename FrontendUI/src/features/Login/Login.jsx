@@ -1,40 +1,61 @@
 import { useNavigate } from "react-router-dom";
 import useForm from "../../components/useForm/useForm";
 import { useEffect, useState } from "react";
-import { loginUser } from "../../services/user";
+import { getUser, loginUser } from "../../services/user";
 import FloatingLabelInput from "../../components/FormGroups/FloatingLabelInput";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
+import jwtDecode from "jwt-decode";
 
 const Login = () => {
-  const { errors, values, handleChange, handleSubmit, clearValues } =
-    useForm(login);
+  const { values, handleChange, handleSubmit, clearValues } = useForm(login);
 
-  const [jwt, setJwt] = useState(false);
+  const [jwt, setJwt] = useState(localStorage.getItem("JWT"));
   const [isLoading, setLoading] = useState(false);
+  const [baseURL, setBaseURL] = useState("http://localhost:8000/api/");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    onLoad();
+  }, []);
+
+  useEffect(() => {
+    clearValues();
+    if (jwt) {
+      localStorage.setItem("JWT", jwt);
+      navigate("/profile");
+    }
+  }, [jwt]);
 
   const getJwt = async () => {
+    setLoading(true);
     let credentials = {
       username: values.loginUsername,
       password: values.loginPassword,
     };
-    const response = await loginUser(
-      credentials,
-      "http://localhost:8000/api/auth/login/"
-    );
+    const response = await loginUser(credentials, `${baseURL}auth/login/`);
     if (response) {
-      const { access } = response.data;
+      const { access, refresh } = response.data;
       setJwt(access);
+      localStorage.setItem("refreshToken", refresh);
     } else {
-      console.log("Unable to login");
+      //TODO Toast or modal with bad credentials, prompt to register
     }
     setLoading(false);
   };
 
   function login() {
     getJwt();
-    setLoading(true);
-    while (isLoading) {}
+  }
+
+  function onLoad() {
+    if (jwt) {
+      const decode = jwtDecode(jwt);
+      let user = getUser(`${baseURL}auth/user/?user=${decode.user_id}`);
+      if (user.survey_complete) {
+        navigate("/profile");
+      }
+    }
   }
 
   return (
@@ -51,49 +72,54 @@ const Login = () => {
               <a href="/register">Register</a>
             </span>
 
-            <FloatingLabelInput
-              inputType="text"
-              divClasses="form-floating mb-3"
-              inputId="loginUsername"
-              inputValue={values.loginUsername}
-              handleChange={handleChange}
-              labelText="Username"
-              placeholderText="Username"
-            />
+            <div className="form-floating mb-3">
+              <FloatingLabelInput
+                inputClasses="form-control"
+                inputType="text"
+                inputId="loginUsername"
+                inputValue={values.loginUsername}
+                handleChange={handleChange}
+                labelText="Username"
+                placeholderText="Username"
+              />
+            </div>
 
-            <FloatingLabelInput
-              inputType="password"
-              divClasses="form-floating"
-              inputId="loginPassword"
-              inputValue={values.loginPassword}
-              handleChange={handleChange}
-              labelText="Password"
-              placeholderText="Password"
-            />
+            <div className="form-floating">
+              <FloatingLabelInput
+                inputClasses="form-control"
+                inputType="password"
+                inputId="loginPassword"
+                inputValue={values.loginPassword}
+                handleChange={handleChange}
+                labelText="Password"
+                placeholderText="Password"
+              />
+            </div>
+          </div>
+
+          <div className="form-input m-3">
+            <Button
+              variant="primary"
+              type="submit"
+              disabled={isLoading ? true : false}
+            >
+              {isLoading ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  <span className="visually-hidden">Loading...</span>
+                </>
+              ) : (
+                "Login"
+              )}
+            </Button>
           </div>
         </fieldset>
-        <div className="form-input m-3">
-          <Button
-            variant="primary"
-            disabled={isLoading ? true : false}
-            onClick={handleSubmit}
-          >
-            {isLoading ? (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />
-                <span className="visually-hidden">Loading...</span>
-              </>
-            ) : (
-              "Register"
-            )}
-          </Button>
-        </div>
       </form>
     </div>
   );

@@ -6,7 +6,9 @@ import Home from "./components/Home/Home";
 import Footer from "./components/Footer/Footer";
 import WhatsInside from "./components/WhatsInside/WhatsInside";
 import Register from "./features/Register/Register";
+import Survey from "./features/Survey/Survey";
 import Login from "./features/Login/Login";
+import Profile from "./features/Profile/Profile";
 
 function App() {
   return (
@@ -21,7 +23,10 @@ function App() {
               <Route path="/" exact element={<Home />} />
               <Route path="/whats-inside" element={<WhatsInside />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/survey" element={<Survey />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/profile" element={<Profile />} />
+
             </Routes>
             <Footer />
           </div>
