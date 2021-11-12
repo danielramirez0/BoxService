@@ -1,7 +1,6 @@
-import React from "react";
 import hero from "../../img/Hero_Edit.png";
 
-const Navbar = () => {
+const Navbar = (props) => {
   let items = 0;
   return (
     <div className="row mb-4">
@@ -51,8 +50,11 @@ const Navbar = () => {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/login">
-                  Login
+                <a
+                  className="nav-link"
+                  href={props.authenticated ? "/logoff" : "/login"}
+                >
+                  {props.authenticated ? "Logoff" : "Login"}
                 </a>
               </li>
             </ul>

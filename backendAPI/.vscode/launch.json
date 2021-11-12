@@ -8,7 +8,7 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/drf_backend_API/drf_jwt_backend/manage.py",
+            "program": "${workspaceFolder}/drf_jwt_backend/manage.py",
             "args": ["runserver"],
             "console": "integratedTerminal",
             "django": true 

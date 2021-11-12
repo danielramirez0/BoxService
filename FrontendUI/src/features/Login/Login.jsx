@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import jwtDecode from "jwt-decode";
 
-const Login = () => {
+const Login = (props) => {
   const { values, handleChange, handleSubmit, clearValues } = useForm(login);
 
   const [jwt, setJwt] = useState(localStorage.getItem("JWT"));
@@ -23,6 +23,7 @@ const Login = () => {
     clearValues();
     if (jwt) {
       localStorage.setItem("JWT", jwt);
+      props.toggleAuth()
       navigate("/profile");
     }
   }, [jwt]);
