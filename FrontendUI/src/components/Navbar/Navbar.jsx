@@ -50,6 +50,11 @@ const Navbar = (props) => {
                 </a>
               </li>
               <li className="nav-item">
+                <a className="nav-link" hidden={!props.authenticated ? true : false} href="/profile">
+                    My Account
+                </a>
+              </li>
+              <li className="nav-item">
                 <a
                   className="nav-link"
                   href={props.authenticated ? "/logoff" : "/login"}

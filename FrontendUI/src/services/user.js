@@ -41,9 +41,9 @@ export async function getUser(endpoint) {
   return result;
 }
 
-export async function updateUser(endpoint, user) {
+export async function updateUser(endpoint, data) {
   const result = await axios
-    .put(endpoint, user)
+    .put(endpoint, data)
     .then((response) => {
       return response;
     })

@@ -21,4 +21,5 @@ urlpatterns = [
     path('api/auth/', include('authentication.urls')),
     path('api/games/', include('games.urls')),
     path('api/surveys/', include('surveys.urls')),
+    path('api/box/', include('box.urls')),
 ]

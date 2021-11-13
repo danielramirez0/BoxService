@@ -23,7 +23,7 @@ const Login = (props) => {
     clearValues();
     if (jwt) {
       localStorage.setItem("JWT", jwt);
-      props.toggleAuth()
+      props.toggleAuth();
       navigate("/profile");
     }
   }, [jwt]);
@@ -98,28 +98,6 @@ const Login = (props) => {
             </div>
           </div>
 
-          <div className="form-input m-3">
-            <Button
-              variant="primary"
-              type="submit"
-              disabled={isLoading ? true : false}
-            >
-              {isLoading ? (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  <span className="visually-hidden">Loading...</span>
-                </>
-              ) : (
-                "Login"
-              )}
-            </Button>
-          </div>
           <div className="form-input m-3">
             <Button
               variant="primary"

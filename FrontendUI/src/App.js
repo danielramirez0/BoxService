@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import "bootswatch/dist/superhero/bootstrap.min.css";
+import "./App.css"
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
 import Footer from "./components/Footer/Footer";
@@ -12,6 +13,9 @@ import Logoff from "./features/Logoff/Logoff";
 import Profile from "./features/Profile/Profile";
 
 function App() {
+  const [backendBaseURL, setBackendBaseURL] = useState(
+    "http://localhost:8000/api/"
+  );
   const [authenticated, setAuthenticated] = useState(
     localStorage.getItem("JWT")
   );
@@ -31,22 +35,41 @@ function App() {
       <header className="App-header">
         <div className="row">
           <div className="col-md-1"></div>
-          <div className="col">
+          <div className="col" id='main-parent'>
             <Navbar authenticated={showLogoff} />
             <Routes>
               <Route path="/" exact element={<Home />} />
               <Route path="/whats-inside" element={<WhatsInside />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/survey" element={<Survey />} />
+              <Route
+                path="/register"
+                element={<Register baseURL={backendBaseURL} />}
+              />
+              <Route
+                path="/survey"
+                element={<Survey baseURL={backendBaseURL} />}
+              />
               <Route
                 path="/login"
-                element={<Login toggleAuth={() => toggleAuth()} />}
+                element={
+                  <Login
+                    toggleAuth={() => toggleAuth()}
+                    baseURL={backendBaseURL}
+                  />
+                }
               />
               <Route
                 path="/logoff"
-                element={<Logoff toggleAuth={() => toggleAuth()} />}
+                element={
+                  <Logoff
+                    toggleAuth={() => toggleAuth()}
+                    baseURL={backendBaseURL}
+                  />
+                }
               />
-              <Route path="/profile" element={<Profile />} />
+              <Route
+                path="/profile"
+                element={<Profile baseURL={backendBaseURL} />}
+              />
             </Routes>
             <Footer />
           </div>

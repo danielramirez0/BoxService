@@ -6,7 +6,7 @@ import { getUser, postSurveyAnswers, updateUser } from "../../services/user";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import FloatingLabelInput from "../../components/FormGroups/FloatingLabelInput";
-import { getAllObjectsAt } from "../../services/games";
+import { getAllObjectsAt } from "../../services/API";
 import jwtDecode from "jwt-decode";
 import "./survey.css";
 import axios from "axios";
@@ -45,7 +45,6 @@ const Survey = () => {
 
   async function onLoad() {
     setLoading(true);
-    const result = getUser();
     let jwt = localStorage.getItem("JWT");
     if (jwt) {
       const decoded = jwtDecode(jwt);
