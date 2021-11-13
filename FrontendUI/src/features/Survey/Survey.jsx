@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import useForm from "../../components/useForm/useForm";
-import LabeledInput from "../../components/FormGroups/LabeledInput";
 import { useEffect, useState } from "react";
 import { getUser, postSurveyAnswers, updateUser } from "../../services/user";
 import Button from "react-bootstrap/Button";
@@ -9,10 +8,9 @@ import FloatingLabelInput from "../../components/FormGroups/FloatingLabelInput";
 import { getAllObjectsAt } from "../../services/API";
 import jwtDecode from "jwt-decode";
 import "./survey.css";
-import axios from "axios";
 
 const Survey = () => {
-  const { errors, values, handleChange, handleSubmit, clearValues } =
+  const { values, handleChange, handleSubmit, clearValues } =
     useForm(submitSurvey);
 
   const [isLoading, setLoading] = useState(false);

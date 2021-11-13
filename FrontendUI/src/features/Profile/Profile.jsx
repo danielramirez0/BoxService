@@ -34,7 +34,6 @@ const Profile = (props) => {
     for (const key in data) {
       const value = data[key];
       newData[key] = value;
-      console.log(newData, key, value);
     }
     let updatedAccount = await updateUser(
       `${props.baseURL}auth/user/?user=${accountData.id}`,
