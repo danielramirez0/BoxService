@@ -3,13 +3,25 @@ import { useState, useEffect } from "react";
 import NavCard from "../../components/NavCard/NavCard";
 import { getUser, updateUser } from "../../services/user";
 import ProfileBody from "../../components/ProfileBody/ProfileBody";
-import { getAllObjectsAt } from "../../services/API";
+import { getAllObjectsAt, getDetailAt } from "../../services/API";
+import { useNavigate } from "react-router";
 
 const Profile = (props) => {
   const [accountData, setAccountData] = useState({});
+  const [preferences, setPreferences] = useState({
+    platforms: [],
+    publishers: [],
+    genres: [],
+  });
+  const [preferenceNames, setPreferenceNames] = useState({
+    platforms: [],
+    publishers: [],
+    genres: [],
+  });
   const [isLoading, setLoading] = useState(false);
-  const [display, setDisplay] = useState("Account");
+  const [display, setDisplay] = useState("Tier");
   const [boxTiers, setBoxTiers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -23,10 +35,58 @@ const Profile = (props) => {
 
   async function onLoad(id) {
     let account = await getUser(`${props.baseURL}auth/user/?user=${id}`);
-    let boxTiers = await getAllObjectsAt(`${props.baseURL}box/all/`);
-    setAccountData(account.data);
-    setBoxTiers(boxTiers);
-    setLoading(false);
+    if (account.data.survey_complete) {
+      let platforms = await getAllObjectsAt(
+        `${props.baseURL}surveys/answers/?user=${id}&type=platform`
+      );
+      let publishers = await getAllObjectsAt(
+        `${props.baseURL}surveys/answers/?user=${id}&type=publisher`
+      );
+      let genres = await getAllObjectsAt(
+        `${props.baseURL}surveys/answers/?user=${id}&type=genre`
+      );
+      let boxTiers = await getAllObjectsAt(`${props.baseURL}box/all/`);
+      let platformNames = await getPreferenceName(platforms, "platform");
+      let publisherNames = await getPreferenceName(publishers, "publisher");
+      let genreNames = await getPreferenceName(genres, "genre");
+      let names = {
+        platforms: platformNames,
+        publishers: publisherNames,
+        genres: genreNames,
+      };
+      setPreferenceNames(names);
+      setAccountData(account.data);
+      setPreferences({
+        platforms: platforms,
+        publishers: publishers,
+        genres: genres,
+      });
+      setBoxTiers(boxTiers);
+      setLoading(false);
+    } else {
+      navigate("/survey");
+    }
+  }
+
+  async function getPreferenceName(arr, type) {
+    let names = [];
+    for (let i = 0; i < arr.length; i++) {
+      let itemId;
+      if (type === "platform") {
+        itemId = arr[i].platform;
+      } else if (type === "publisher") {
+        itemId = arr[i].publisher;
+      } else {
+        itemId = arr[i].genre;
+      }
+      let result = await getDetailAt(
+        `${props.baseURL}games/detail/`,
+        itemId,
+        type
+      );
+      names.push(result);
+    }
+    return names;
   }
 
   async function updateAccount(data, redirect) {
@@ -47,6 +107,8 @@ const Profile = (props) => {
     return (
       <ProfileBody
         data={accountData}
+        preferences={preferences}
+        preferenceNames={preferenceNames}
         view={display}
         boxTiers={boxTiers}
         updateAccount={updateAccount}

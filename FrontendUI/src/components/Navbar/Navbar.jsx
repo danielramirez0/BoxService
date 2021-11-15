@@ -1,7 +1,7 @@
 import hero from "../../img/Hero_Edit.png";
 
 const Navbar = (props) => {
-  let items = 0;
+//   let items = 0;
   return (
     <div className="row mb-4">
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -44,11 +44,11 @@ const Navbar = (props) => {
                   About
                 </a>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <a className="nav-link" href="/cart">
                   Cart({items.length > 0 ? items.length : "0"})
                 </a>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <a className="nav-link" hidden={!props.authenticated ? true : false} href="/profile">
                     My Account

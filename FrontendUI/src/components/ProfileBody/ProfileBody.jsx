@@ -1,15 +1,16 @@
 import { autoCapsFirst } from "../../services/func";
+import { getDetailAt } from "../../services/API";
 import BoxTier from "../BoxTier/BoxTier";
 import TwoColumnTable from "../TwoColumnTable/TwoColumnTable";
 import AccountForm from "../AccountForm/AccountForm";
 
 const ProfileBody = (props) => {
-//   let currentBox;
-//   if (props.data.subscription) {
-//     currentBox = props.boxTiers.filter((box) => {
-//       return box.id === props.data.subscription;
-//     })[0];
-//   }
+  //   let currentBox;
+  //   if (props.data.subscription) {
+  //     currentBox = props.boxTiers.filter((box) => {
+  //       return box.id === props.data.subscription;
+  //     })[0];
+  //   }
 
   function showAccount() {
     let tableData = [
@@ -99,7 +100,7 @@ const ProfileBody = (props) => {
   function showTierOptions() {
     return (
       <div className="col">
-        <h2>You need to select a tier!</h2>
+        <h2>Select a tier!</h2>
         {props.boxTiers.map((box) => (
           <BoxTier
             key={box.id}
@@ -115,15 +116,43 @@ const ProfileBody = (props) => {
     );
   }
 
+  function showPreferences() {
+    return (
+      <div className="col">
+        <h2>Preferences</h2>
+        <div className="row">
+          <div className="col-4">
+            <h3 className="m-4">Platforms</h3>
+            {props.preferenceNames.platforms.map((platform) => (
+              <p>{platform.platform_name}</p>
+            ))}
+          </div>
+          <div className="col-4">
+            <h3 className="m-4">Publishers</h3>
+            {props.preferenceNames.publishers.map((publisher) => (
+              <p>{publisher.publisher_name}</p>
+            ))}
+          </div>
+          <div className="col-4">
+            <h3 className="m-4">Genre</h3>
+            {props.preferenceNames.genres.map((genre) => (
+              <p>{genre.genre_name}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <h1>{props.view}</h1>
+      {/* <h1>{props.view}</h1> */}
       {props.view === "Account" && showAccount()}
       {props.view === "Edit Account" && showEditAccount()}
       {props.view === "Tier" &&
         (props.data.subscription ? showTier() : showTierOptions())}
       {props.view === "Edit Tier" && showTierOptions()}
-      {props.view === "Preferences" && <h2>This is preferences page</h2>}
+      {props.view === "Preferences" && showPreferences()}
       {props.view === "Billing" && <h2>This is billing page</h2>}
     </div>
   );
