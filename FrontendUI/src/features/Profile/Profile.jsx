@@ -40,7 +40,7 @@ const Profile = (props) => {
       newData
     );
     await setAccountData(updatedAccount.data);
-    setDisplay(redirect)
+    setDisplay(redirect);
   }
 
   function renderComponent() {

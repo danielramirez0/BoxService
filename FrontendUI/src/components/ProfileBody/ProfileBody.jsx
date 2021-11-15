@@ -1,7 +1,13 @@
-import { useEffect } from "react";
-import { autoCapsFirst } from "../../services/func";
-
+import { useState, useEffect } from "react";
+import func, { autoCapsFirst } from "../../services/func";
+import useForm from "../useForm/useForm";
+import isOkPass from "../../services/user";
+import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
 import BoxTier from "../BoxTier/BoxTier";
+import LabeledInput from "../FormGroups/LabeledInput";
+import TwoColumnTable from "../TwoColumnTable/TwoColumnTable";
+import AccountForm from "../AccountForm/AccountForm";
 
 const ProfileBody = (props) => {
   let currentBox;
@@ -12,47 +18,71 @@ const ProfileBody = (props) => {
   }
 
   function showAccount() {
+    let tableData = [
+      { name: "User Name", value: props.data.username },
+      { name: "First Name", value: props.data.first_name },
+      { name: "Middle Name", value: props.data.middle_name },
+      { name: "Last Name", value: props.data.last_name },
+      { name: "Email Address", value: props.data.email },
+      { name: "Account Balance", value: props.data.balance },
+    ];
+    let tableMessage = "Here are your account details";
     return (
       <div className="">
         <h3>Hello {props.data.first_name}!</h3>
-        <p>Here are your account details</p>
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">Record</th>
-              <th scope="col">Detail</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="table-dark">
-              <th scope="row">User Name</th>
-              <td>{props.data.username}</td>
-            </tr>
-            <tr className="">
-              <th scope="row">First Name</th>
-              <td>{props.data.first_name}</td>
-            </tr>
-            <tr className="table-dark">
-              <th scope="row">Middle Name</th>
-              <td>{props.data.middle_name}</td>
-            </tr>
-            <tr className="">
-              <th scope="row">Last Name</th>
-              <td>{props.data.last_name}</td>
-            </tr>
-            <tr className="table-dark">
-              <th scope="row">Email Address</th>
-              <td>{props.data.email}</td>
-            </tr>
-            <tr className="">
-              <th scope="row">Account Balance</th>
-              <td>${props.data.balance}</td>
-            </tr>
-          </tbody>
-        </table>
+        <TwoColumnTable
+          tableMessage={tableMessage}
+          data={tableData}
+          headerOne="Record"
+          headerTwo="Detail"
+        />
       </div>
     );
   }
+
+  function showEditAccount() {
+    let formData = [
+      {
+        inputId: "username",
+        labelText: "Username",
+        inputType: "text",
+        placeholder: props.data.username,
+      },
+      {
+        inputId: "first_name",
+        labelText: "First Name",
+        inputType: "text",
+        placeholder: props.data.first_name,
+      },
+      {
+        inputId: "middle_name",
+        labelText: "Middle Name",
+        inputType: "text",
+        placeholder: props.data.middle_name,
+      },
+      {
+        inputId: "last_name",
+        labelText: "Last Name",
+        inputType: "text",
+        placeholder: props.data.last_name,
+      },
+      {
+        inputId: "email",
+        labelText: "Email Address",
+        inputType: "text",
+        placeholder: props.data.email,
+      },
+    ];
+    return (
+      <AccountForm
+        formCallback={props.updateAccount}
+        data={formData}
+        legend="Update one or more fields"
+        buttonText="Submit"
+      />
+    );
+  }
+
   function showTier() {
     let tier = props.boxTiers[props.data.subscription - 1];
     return (
@@ -95,6 +125,7 @@ const ProfileBody = (props) => {
     <div>
       <h1>{props.view}</h1>
       {props.view === "Account" && showAccount()}
+      {props.view === "Edit Account" && showEditAccount()}
       {props.view === "Tier" &&
         (props.data.subscription ? showTier() : showTierOptions())}
       {props.view === "Edit Tier" && showTierOptions()}
