@@ -12,7 +12,7 @@ const Login = (props) => {
 
   const [jwt, setJwt] = useState(localStorage.getItem("JWT"));
   const [isLoading, setLoading] = useState(false);
-  const [baseURL, setBaseURL] = useState("http://localhost:8000/api/");
+  const [baseURL] = useState("http://localhost:8000/api/");
   const navigate = useNavigate();
 
   useEffect(() => {

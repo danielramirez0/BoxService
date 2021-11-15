@@ -1,16 +1,14 @@
-import { useNavigate } from "react-router-dom";
 import useForm from "../../components/useForm/useForm";
 import LabeledInput from "../../components/FormGroups/LabeledInput";
-import { useEffect, useState } from "react";
-import isOkPass, { registerNewUser, postNewProfile } from "../../services/user";
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 
 const AccountForm = (props) => {
-  const { errors, values, handleChange, handleSubmit, clearValues } =
+  const { values, handleChange, handleSubmit} =
     useForm(sendUpdates);
 
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading] = useState(false);
   function sendUpdates() {
       props.formCallback(values, 'Account')
   }

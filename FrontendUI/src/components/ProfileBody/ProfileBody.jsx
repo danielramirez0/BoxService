@@ -1,21 +1,15 @@
-import { useState, useEffect } from "react";
-import func, { autoCapsFirst } from "../../services/func";
-import useForm from "../useForm/useForm";
-import isOkPass from "../../services/user";
-import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
+import { autoCapsFirst } from "../../services/func";
 import BoxTier from "../BoxTier/BoxTier";
-import LabeledInput from "../FormGroups/LabeledInput";
 import TwoColumnTable from "../TwoColumnTable/TwoColumnTable";
 import AccountForm from "../AccountForm/AccountForm";
 
 const ProfileBody = (props) => {
-  let currentBox;
-  if (props.data.subscription) {
-    currentBox = props.boxTiers.filter((box) => {
-      return box.id === props.data.subscription;
-    })[0];
-  }
+//   let currentBox;
+//   if (props.data.subscription) {
+//     currentBox = props.boxTiers.filter((box) => {
+//       return box.id === props.data.subscription;
+//     })[0];
+//   }
 
   function showAccount() {
     let tableData = [

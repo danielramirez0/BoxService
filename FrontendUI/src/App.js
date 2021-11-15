@@ -13,7 +13,7 @@ import Logoff from "./features/Logoff/Logoff";
 import Profile from "./features/Profile/Profile";
 
 function App() {
-  const [backendBaseURL, setBackendBaseURL] = useState(
+  const [backendBaseURL] = useState(
     "http://localhost:8000/api/"
   );
   const [authenticated, setAuthenticated] = useState(

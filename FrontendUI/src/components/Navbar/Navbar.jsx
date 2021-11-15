@@ -45,7 +45,7 @@ const Navbar = (props) => {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <a className="nav-link" href="/cart">
                   Cart({items.length > 0 ? items.length : "0"})
                 </a>
               </li>
