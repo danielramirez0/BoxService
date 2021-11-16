@@ -196,33 +196,65 @@ const ProfileBody = (props) => {
     );
   }
 
-  function getTierNumbers(tier) {
+  function showSubscriptions() {
+    return (
+      <Chart
+        width={"600px"}
+        height={"400px"}
+        chartType="LineChart"
+        loader={<div>Loading Chart</div>}
+        data={[
+          ["x", "Sub Tier"],
+          ["Bronze", props.subscriptions.bronze.length],
+          ["Silver", props.subscriptions.silver.length],
+          ["Gold", props.subscriptions.gold.length],
+        ]}
+        options={{
+          hAxis: {
+            title: "Subscriptions",
+          },
+          vAxis: {
+            title: "Popularity",
+          },
+        }}
+        rootProps={{ "data-testid": "1" }}
+      />
+    );
   }
-  function showSubscriptions(){
-      return (
-          <Chart
-          width={'600px'}
-          height={'400px'}
-          chartType="LineChart"
-          loader={<div>Loading Chart</div>}
-          data={[
-            ['x', 'Sub Tier'],
-            ['Bronze', props.subscriptions.bronze.length],
-            ['Silver', props.subscriptions.silver.length],
-            ['Gold', props.subscriptions.gold.length],
-          ]}
-          options={{
-            hAxis: {
-              title: 'Subscriptions',
-            },
-            vAxis: {
-              title: 'Popularity',
-            },
-          }}
-          rootProps={{ 'data-testid': '1' }}
-        />
-      )
 
+  function showRevenue() {
+    return (
+      <div className="mt-4">
+        <h1>Monthly Revenue From Each Tier</h1>
+        <div className="row">
+          <div className="col-4 mt-4">
+            <h3>Bronze</h3>
+            <h2>${props.subscriptions.bronze.length * 20}</h2>
+          </div>
+          <div className="col-4 mt-4">
+            <h3>Silver</h3>
+            <h2>${props.subscriptions.silver.length * 40}</h2>
+          </div>
+          <div className="col-4 mt-4">
+            <h3>Gold</h3>
+            <h2>${props.subscriptions.gold.length * 50}</h2>
+          </div>
+        </div>
+        <div className="row">
+          <h3 className="mt-4 pt-4">Total Monthly Revenue Generation</h3>
+          <h2>
+            $
+            {props.subscriptions.bronze.length * 20 +
+              props.subscriptions.silver.length * 40 +
+              props.subscriptions.gold.length * 50}
+          </h2>
+        </div>
+      </div>
+    );
+  }
+
+  function showInProgress() {
+    return <h1>This Section is under development</h1>;
   }
 
   return (
@@ -237,7 +269,13 @@ const ProfileBody = (props) => {
       {props.view === "Edit Preferences" && showEditPreferences()}
       {props.view === "Billing" && <h2>This is billing page</h2>}
       {props.view === "Customers" && showCustomers()}
+      {props.view === "Edit Customers" && showInProgress()}
       {props.view === "Subscriptions" && showSubscriptions()}
+      {props.view === "Edit Subscriptions" && showInProgress()}
+      {props.view === "Revenue" && showRevenue()}
+      {props.view === "Edit Revenue" && showInProgress()}
+      {props.view === "Analytics" && showInProgress()}
+      {props.view === "Edit Analytics" && showInProgress()}
     </div>
   );
 };

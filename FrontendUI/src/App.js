@@ -74,8 +74,8 @@ function App() {
                 element={<Sysad baseURL={backendBaseURL} />}
               />
             </Routes>
-            <Footer />
           </div>
+            <Footer />
           <div className="col-md-1"></div>
         </div>
       </header>

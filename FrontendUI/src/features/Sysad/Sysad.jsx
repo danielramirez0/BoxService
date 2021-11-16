@@ -1,10 +1,7 @@
-import jwtDecode from "jwt-decode";
 import { useState, useEffect } from "react";
 import NavCard from "../../components/NavCard/NavCard";
-import { getUser, updateUser } from "../../services/user";
 import ProfileBody from "../../components/ProfileBody/ProfileBody";
-import { getAllObjectsAt, getDetailAt } from "../../services/API";
-import { useNavigate } from "react-router";
+import { getAllObjectsAt } from "../../services/API";
 
 const Sysad = (props) => {
   const [customers, setCustomers] = useState([]);
@@ -12,7 +9,6 @@ const Sysad = (props) => {
   const [display, setDisplay] = useState("Customers");
   const [boxTiers, setBoxTiers] = useState([]);
   const [subscriptions, setSubscriptions] = useState({});
-  const navigate = useNavigate();
 
   useEffect(() => {
     onLoad();
@@ -27,7 +23,7 @@ const Sysad = (props) => {
     let customers = await getAllObjectsAt(`${props.baseURL}sysad/`);
     let subs = await getAllObjectsAt(`${props.baseURL}sysad/subscriptions/`);
     setCustomers(customers);
-    setSubscriptions(subs)
+    setSubscriptions(subs);
     setLoading(false);
   }
 
@@ -40,11 +36,8 @@ const Sysad = (props) => {
       <ProfileBody
         data={customers}
         subscriptions={subscriptions}
-        // preferences={preferences}
-        // preferenceNames={preferenceNames}
         view={display}
         boxTiers={boxTiers}
-        // updateAccount={updateAccount}
         resetDisplay={resetDisplay}
       />
     );
