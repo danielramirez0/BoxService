@@ -1,6 +1,5 @@
-from django.db.models import fields
 from rest_framework import serializers
-from .models import Platform, Publisher, Genre
+from .models import Game, Platform, Publisher, Genre
 
 
 class PlatformSerializer(serializers.ModelSerializer):
@@ -19,3 +18,8 @@ class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = ['id', 'genre_name']
+
+class GameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Game
+        fields = ['id', 'genre', 'game_name']

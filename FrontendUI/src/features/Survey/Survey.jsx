@@ -1,18 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import useForm from "../../components/useForm/useForm";
-import LabeledInput from "../../components/FormGroups/LabeledInput";
 import { useEffect, useState } from "react";
 import { getUser, postSurveyAnswers, updateUser } from "../../services/user";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import FloatingLabelInput from "../../components/FormGroups/FloatingLabelInput";
-import { getAllObjectsAt } from "../../services/games";
+import { getAllObjectsAt } from "../../services/API";
 import jwtDecode from "jwt-decode";
 import "./survey.css";
-import axios from "axios";
 
-const Survey = () => {
-  const { errors, values, handleChange, handleSubmit, clearValues } =
+const Survey = (props) => {
+  const { values, handleChange, handleSubmit, clearValues } =
     useForm(submitSurvey);
 
   const [isLoading, setLoading] = useState(false);
@@ -45,7 +43,6 @@ const Survey = () => {
 
   async function onLoad() {
     setLoading(true);
-    const result = getUser();
     let jwt = localStorage.getItem("JWT");
     if (jwt) {
       const decoded = jwtDecode(jwt);
@@ -163,6 +160,7 @@ const Survey = () => {
     );
 
     navigate("/profile");
+    props.resetDisplay('Preferences')
   }
 
   return (
@@ -183,7 +181,7 @@ const Survey = () => {
             </legend>
             <small className="m-3">Select 1 or more</small>
           </div>
-          <h3>Here are your selections</h3>
+          <h3 hidden={showPlatforms || showPlatforms || showGenres ? true : false} >Here are your selections</h3>
 
           <div className="row mt-4">
             {showPlatforms && (

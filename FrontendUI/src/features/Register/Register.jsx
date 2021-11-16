@@ -2,12 +2,12 @@ import { useNavigate } from "react-router-dom";
 import useForm from "../../components/useForm/useForm";
 import LabeledInput from "../../components/FormGroups/LabeledInput";
 import { useEffect, useState } from "react";
-import isOkPass, { registerNewUser, postNewProfile } from "../../services/user";
+import isOkPass, { registerNewUser} from "../../services/user";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 
 const Register = () => {
-  const { errors, values, handleChange, handleSubmit, clearValues } =
+  const { errors, values, handleChange, handleSubmit} =
     useForm(registerUser);
 
   const [isRegistered, setIsRegistered] = useState(false);
@@ -16,7 +16,7 @@ const Register = () => {
 
   useEffect(() => {
     if (isRegistered) {
-      navigate("/");
+      navigate("/login");
     }
   }, [isRegistered]);
 

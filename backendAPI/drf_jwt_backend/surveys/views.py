@@ -15,10 +15,27 @@ from .models import *
 
 
 class Answers(APIView):
+    '''Submit all answers from survey'''
 
     def get(self, request):
-        data = JSONParser().parse(request)
-        
+        '''Collect details on user preferences'''
+        user = request.query_params.get('user')
+        type = request.query_params.get('type')
+        if user and type:
+            if type == 'platform':
+                platformPreferences = UserPlatform.objects.filter(user=user)
+                serializer = UserPlatformSerializer(
+                    platformPreferences, many=True)
+            elif type == 'publisher':
+                publisherPreferences = UserPublisher.objects.filter(user=user)
+                serializer = UserPublisherSerializer(
+                    publisherPreferences, many=True)
+            elif type == 'genre':
+                genrePreferences = UserGenre.objects.filter(user=user)
+                serializer = UserGenreSerializer(genrePreferences, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': "Missing User Id or type parameter"}, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):
         data = JSONParser().parse(request)
@@ -62,7 +79,8 @@ class AddPublisherAnswer(APIView):
             return Publisher.objects.get(pk=id)
         except Publisher.DoesNotExist:
             raise Http404
-        
+
+
 class AddGenreAnswer(APIView):
 
     def get_user(self, id):
@@ -78,4 +96,3 @@ class AddGenreAnswer(APIView):
             return Genre.objects.get(pk=id)
         except Genre.DoesNotExist:
             raise Http404
-

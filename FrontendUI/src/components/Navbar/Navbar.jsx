@@ -1,8 +1,7 @@
-import React from "react";
 import hero from "../../img/Hero_Edit.png";
 
-const Navbar = () => {
-  let items = 0;
+const Navbar = (props) => {
+//   let items = 0;
   return (
     <div className="row mb-4">
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -25,34 +24,47 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarColor02">
             <ul className="navbar-nav ms-auto me-auto">
               <li className="nav-item">
-                <a className="nav-link active" href="/getStarted">
+                <a className="nav-link active" href="/">
                   Get Started
                   <span className="visually-hidden">(current)</span>
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/whats-inside">
+                <a className="nav-link disabled" href="/whats-inside">
                   What's Inside
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/unboxing-videos">
+                <a className="nav-link disabled" href="/unboxing-videos">
                   Unboxing Videos
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/about">
+                <a className="nav-link disabled" href="/about">
                   About
                 </a>
               </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
+              {/* <li className="nav-item">
+                <a className="nav-link" href="/cart">
                   Cart({items.length > 0 ? items.length : "0"})
+                </a>
+              </li> */}
+              <li className="nav-item">
+                <a className="nav-link" hidden={!props.authenticated ? true : false} href="/profile">
+                    My Account
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/login">
-                  Login
+                <a className="nav-link" hidden={!props.authenticated ? true : false} href="/sysad">
+                    Administrator
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  href={props.authenticated ? "/logoff" : "/login"}
+                >
+                  {props.authenticated ? "Logoff" : "Login"}
                 </a>
               </li>
             </ul>

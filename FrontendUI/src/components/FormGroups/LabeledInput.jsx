@@ -10,8 +10,9 @@ const LabeledInput = (props) => {
         className="form-control text-center"
         id={props.inputId}
         value={props.inputValue || ''}
-        onChange={(e) => props.handleChange(e)}
+        onChange={(event) => props.handleChange(event)}
         required={props.isRequired}
+        placeholder={props.placeholder}
       />
     </div>
   );

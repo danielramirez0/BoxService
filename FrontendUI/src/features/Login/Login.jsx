@@ -7,12 +7,12 @@ import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import jwtDecode from "jwt-decode";
 
-const Login = () => {
+const Login = (props) => {
   const { values, handleChange, handleSubmit, clearValues } = useForm(login);
 
   const [jwt, setJwt] = useState(localStorage.getItem("JWT"));
   const [isLoading, setLoading] = useState(false);
-  const [baseURL, setBaseURL] = useState("http://localhost:8000/api/");
+  const [baseURL] = useState("http://localhost:8000/api/");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +23,7 @@ const Login = () => {
     clearValues();
     if (jwt) {
       localStorage.setItem("JWT", jwt);
+      props.toggleAuth();
       navigate("/profile");
     }
   }, [jwt]);
@@ -97,28 +98,6 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="form-input m-3">
-            <Button
-              variant="primary"
-              type="submit"
-              disabled={isLoading ? true : false}
-            >
-              {isLoading ? (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  <span className="visually-hidden">Loading...</span>
-                </>
-              ) : (
-                "Login"
-              )}
-            </Button>
-          </div>
           <div className="form-input m-3">
             <Button
               variant="primary"
