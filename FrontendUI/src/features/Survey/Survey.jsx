@@ -9,7 +9,7 @@ import { getAllObjectsAt } from "../../services/API";
 import jwtDecode from "jwt-decode";
 import "./survey.css";
 
-const Survey = () => {
+const Survey = (props) => {
   const { values, handleChange, handleSubmit, clearValues } =
     useForm(submitSurvey);
 
@@ -160,6 +160,7 @@ const Survey = () => {
     );
 
     navigate("/profile");
+    props.resetDisplay('Preferences')
   }
 
   return (
@@ -180,7 +181,7 @@ const Survey = () => {
             </legend>
             <small className="m-3">Select 1 or more</small>
           </div>
-          <h3>Here are your selections</h3>
+          <h3 hidden={showPlatforms || showPlatforms || showGenres ? true : false} >Here are your selections</h3>
 
           <div className="row mt-4">
             {showPlatforms && (

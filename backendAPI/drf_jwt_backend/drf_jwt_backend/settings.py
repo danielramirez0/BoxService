@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'games',
     'surveys',
     'box',
+    'sysad',
 ]
 
 MIDDLEWARE = [

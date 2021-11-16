@@ -1,8 +1,10 @@
 import { autoCapsFirst } from "../../services/func";
-import { getDetailAt } from "../../services/API";
+import Survey from "../../features/Survey/Survey";
 import BoxTier from "../BoxTier/BoxTier";
 import TwoColumnTable from "../TwoColumnTable/TwoColumnTable";
 import AccountForm from "../AccountForm/AccountForm";
+import { Table } from "react-bootstrap";
+import { Chart } from "react-google-charts";
 
 const ProfileBody = (props) => {
   //   let currentBox;
@@ -124,24 +126,103 @@ const ProfileBody = (props) => {
           <div className="col-4">
             <h3 className="m-4">Platforms</h3>
             {props.preferenceNames.platforms.map((platform) => (
-              <p>{platform.platform_name}</p>
+              <p key={platform.id}>{platform.platform_name}</p>
             ))}
           </div>
           <div className="col-4">
             <h3 className="m-4">Publishers</h3>
             {props.preferenceNames.publishers.map((publisher) => (
-              <p>{publisher.publisher_name}</p>
+              <p key={publisher.id}>{publisher.publisher_name}</p>
             ))}
           </div>
           <div className="col-4">
             <h3 className="m-4">Genre</h3>
             {props.preferenceNames.genres.map((genre) => (
-              <p>{genre.genre_name}</p>
+              <p key={genre.id}>{genre.genre_name}</p>
             ))}
           </div>
         </div>
       </div>
     );
+  }
+
+  function showEditPreferences() {
+    return (
+      <Survey
+        baseURL="http://localhost:8000/api/"
+        resetDisplay={props.resetDisplay}
+      />
+    );
+  }
+
+  function getTableColumns(obj) {
+    let rows = [];
+    for (const key in obj) {
+      if (Object.hasOwnProperty.call(obj, key)) {
+        rows.push(key);
+      }
+    }
+    return rows;
+  }
+  function showCustomers() {
+    return (
+      <div className="col">
+        <p>Number of accounts {props.data.length}</p>
+        <Table responsive variant="dark">
+          <thead>
+            <tr>
+              {getTableColumns(props.data[0]).map((column, index) => (
+                <th key={index}>{column}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {props.data.map((customer) => (
+              <tr key={customer.id}>
+                <td>{customer.id}</td>
+                <td>{customer.username}</td>
+                <td>{customer.email || "N/A"}</td>
+                <td>{customer.first_name || "N/A"}</td>
+                <td>{customer.middle_name || "N/A"}</td>
+                <td>{customer.last_name || "N/A"}</td>
+                <td>{customer.subscription || "N/A"}</td>
+                <td>{customer.balance}</td>
+                <td>{customer.survey_complete ? "Yes" : "No"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+    );
+  }
+
+  function getTierNumbers(tier) {
+  }
+  function showSubscriptions(){
+      return (
+          <Chart
+          width={'600px'}
+          height={'400px'}
+          chartType="LineChart"
+          loader={<div>Loading Chart</div>}
+          data={[
+            ['x', 'Sub Tier'],
+            ['Bronze', props.subscriptions.bronze.length],
+            ['Silver', props.subscriptions.silver.length],
+            ['Gold', props.subscriptions.gold.length],
+          ]}
+          options={{
+            hAxis: {
+              title: 'Subscriptions',
+            },
+            vAxis: {
+              title: 'Popularity',
+            },
+          }}
+          rootProps={{ 'data-testid': '1' }}
+        />
+      )
+
   }
 
   return (
@@ -153,7 +234,10 @@ const ProfileBody = (props) => {
         (props.data.subscription ? showTier() : showTierOptions())}
       {props.view === "Edit Tier" && showTierOptions()}
       {props.view === "Preferences" && showPreferences()}
+      {props.view === "Edit Preferences" && showEditPreferences()}
       {props.view === "Billing" && <h2>This is billing page</h2>}
+      {props.view === "Customers" && showCustomers()}
+      {props.view === "Subscriptions" && showSubscriptions()}
     </div>
   );
 };

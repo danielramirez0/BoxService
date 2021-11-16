@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import "bootswatch/dist/superhero/bootstrap.min.css";
-import "./App.css"
+import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
 import Footer from "./components/Footer/Footer";
@@ -11,11 +11,10 @@ import Survey from "./features/Survey/Survey";
 import Login from "./features/Login/Login";
 import Logoff from "./features/Logoff/Logoff";
 import Profile from "./features/Profile/Profile";
+import Sysad from "./features/Sysad/Sysad";
 
 function App() {
-  const [backendBaseURL] = useState(
-    "http://localhost:8000/api/"
-  );
+  const [backendBaseURL] = useState("http://localhost:8000/api/");
   const [authenticated, setAuthenticated] = useState(
     localStorage.getItem("JWT")
   );
@@ -35,7 +34,7 @@ function App() {
       <header className="App-header">
         <div className="row">
           <div className="col-md-1"></div>
-          <div className="col" id='main-parent'>
+          <div className="col" id="main-parent">
             <Navbar authenticated={showLogoff} />
             <Routes>
               <Route path="/" exact element={<Home />} />
@@ -69,6 +68,10 @@ function App() {
               <Route
                 path="/profile"
                 element={<Profile baseURL={backendBaseURL} />}
+              />
+              <Route
+                path="/sysad"
+                element={<Sysad baseURL={backendBaseURL} />}
               />
             </Routes>
             <Footer />

@@ -89,6 +89,10 @@ const Profile = (props) => {
     return names;
   }
 
+  function resetDisplay(redirect) {
+      setDisplay(redirect)
+  }
+
   async function updateAccount(data, redirect) {
     let newData = { ...accountData };
     for (const key in data) {
@@ -112,6 +116,7 @@ const Profile = (props) => {
         view={display}
         boxTiers={boxTiers}
         updateAccount={updateAccount}
+        resetDisplay={resetDisplay}
       />
     );
   }
