@@ -6,6 +6,10 @@ Box services have sprung up in the last few years to offer a certain category of
 
 This is a website for such a subscription box company
 
+## Setup
+
+In order to start testing with the database you must first run the sample_data_videogames_mysql.sql file in your MySQL workbench. The file is located in the resources folder of the backendAPI.
+
 ## Technology
 
 - Django Rest Framework
